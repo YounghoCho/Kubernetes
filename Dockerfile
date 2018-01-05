@@ -1,25 +1,17 @@
 # Base Image
-FROM vutran/docker-nginx-php5-fpm
+FROM nginx
 
 # Set the author 
 MAINTAINER Youngho Jo <dodghek1@naver.com> 
 
-# Update cache and install base packages 
-RUN apt-get update && apt-get -y install \
-    vim \
-    git
+# Remove index.html existed originally
+RUN rm /usr/share/nginx/html/index.html
 
-# Configure PHP settings 
-RUN perl -pi -e 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php5/fpm/php.ini
-RUN perl -pi -e 's/allow_url_fopen = Off/allow_url_fopen = On/g' /etc/php5/fpm/php.ini
-
-# Boot up Nginx, and PHP5-FPM when container is started 
-CMD service php5-fpm start && nginx
+# Copy new source code from Github
+COPY Kubernetes /usr/share/nginx/html
 
 # Set the current working directory 
-WORKDIR /var/www/html
+WORKDIR /usr/share/nginx/html
 
 # Expose port 
 EXPOSE 80 
-EXPOSE 22
-EXPOSE 443
