@@ -13,6 +13,12 @@ RUN apt-get update && apt-get -y install \
 RUN perl -pi -e 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php5/fpm/php.ini
 RUN perl -pi -e 's/allow_url_fopen = Off/allow_url_fopen = On/g' /etc/php5/fpm/php.ini
 
+# Git
+RUN git clone https://github.com/YounghoCho/Kubernetes
+
+# Migration Application
+COPY Kubernetes /var/www/html
+
 # Boot up Nginx, and PHP5-FPM when container is started 
 CMD service php5-fpm start && nginx
 
